@@ -1,0 +1,40 @@
+services:
+  nginx:
+
+    ports:
+      -"443:443"
+  wordpress:
+    volumes:
+      - wordpress:// #location inside the container where the volume appears
+    ports:
+      -"9000:9000"
+  mariadb:
+  volumes:
+      - mariadb:// # sfsfe
+    ports:
+      -"3306:3306"
+
+# docker volumes: stores data that allow the container to remain intact even after the container is stopped or removed
+
+# docker named bind mount:
+# driver: which volume driver to use , local means store on the local machine (host)
+# driver_opts: options passed to the volume driver
+# type: tells linux mount system what filesystem type is being used, none means there is no seprate filesystem to mount
+#o: mount options, bind
+# device: specifies the host file system location to store the data
+
+volumes: #defining a docker volume called wordpress or mariadb
+  mariadb:
+    driver: local
+    driver_opts: 
+      type: none
+      o: bind
+      device: /home/yalkhidi/data/mariadb
+
+  wordpress:
+    driver: local
+    driver_opts: 
+      type: none
+      o: bind
+      device: /home/yalkhidi/data/wordpress
+
