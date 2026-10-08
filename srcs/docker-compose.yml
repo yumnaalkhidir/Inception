@@ -1,18 +1,12 @@
 services:
   nginx:
-
-    ports:
-      -"443:443"
   wordpress:
     volumes:
       - wordpress:// #location inside the container where the volume appears
-    ports:
-      -"9000:9000"
   mariadb:
   volumes:
-      - mariadb:// # sfsfe
-    ports:
-      -"3306:3306"
+      - mariadb:// 
+
 
 # docker volumes: stores data that allow the container to remain intact even after the container is stopped or removed
 
