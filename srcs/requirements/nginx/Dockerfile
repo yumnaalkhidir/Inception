@@ -1,7 +1,6 @@
 FROM debian:bookworm
 
 RUN apt update && \
-    apt upgrade -y && \
     apt install -y nginx openssl && \
     rm -rf /var/lib/apt/lists/*
 
@@ -15,6 +14,5 @@ RUN mkdir -p /etc/nginx/ssl && \
     -subj "/CN=yalkhidi.42.fr"
 
 EXPOSE 443
-
 
 CMD ["nginx", "-g", "daemon off;"]
