@@ -1,11 +1,24 @@
 services:
   nginx:
+    networks:
+      - wp-network
   wordpress:
     volumes:
       - wordpress:// #location inside the container where the volume appears
+    networks:
+      - wp-network
+      - mariadb-network
   mariadb:
-  volumes:
-      - mariadb:// 
+    build: ./requirments/mariadb
+    container_name: mariadb
+    networks:
+      - mariadb-network
+    env_file: .env
+    secrets:
+      -db_user_pass
+      -db_root_pass
+    volumes:
+      - mariadb:/var/lib/mysql 
 
 
 # docker volumes: stores data that allow the container to remain intact even after the container is stopped or removed
@@ -31,4 +44,16 @@ volumes: #defining a docker volume called wordpress or mariadb
       type: none
       o: bind
       device: /home/yalkhidi/data/wordpress
+
+networks:
+  wp-network:
+    driver: bridge
+    internal: true
+  mariadb-network:
+    driver: bridge
+    internal: true
+
+secrets:
+  -db_user_pass: ../secrets/db_user_password.txt
+  -db_root_pass: ../secrets/db_root_password.txt
 
