@@ -1,22 +1,26 @@
 services:
   nginx:
+    build: ./requirements/nginx
+    container_name: nginx
     networks:
       - wp-network
-  wordpress:
     volumes:
-      - wordpress:// #location inside the container where the volume appears
-    networks:
-      - wp-network
-      - mariadb-network
+      - wordpress:/var/www/html
+  # wordpress:
+  #   volumes:
+  #     - wordpress:// #location inside the container where the volume appears
+  #   networks:
+  #     - wp-network
+  #     - mariadb-network
   mariadb:
-    build: ./requirments/mariadb
+    build: ./requirements/mariadb
     container_name: mariadb
     networks:
       - mariadb-network
     env_file: .env
     secrets:
-      -db_user_pass
-      -db_root_pass
+      - db_user_pass
+      - db_root_pass
     volumes:
       - mariadb:/var/lib/mysql 
 
@@ -54,6 +58,8 @@ networks:
     internal: true
 
 secrets:
-  -db_user_pass: ../secrets/db_user_password.txt
-  -db_root_pass: ../secrets/db_root_password.txt
+  db_user_pass:
+     file: ../secrets/db_user_password.txt
+  db_root_pass:
+    file: ../secrets/db_root_password.txt
 
