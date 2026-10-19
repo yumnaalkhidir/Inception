@@ -2,19 +2,35 @@ services:
   nginx:
     build: ./requirements/nginx
     container_name: nginx
+    restart: always
+    ports:
+      - "443:443"
+    depends_on:
+      - wordpress
     networks:
       - wp-network
     volumes:
+      - wordpress:/var/www/html:ro
+
+  wordpress:
+    build: ./requirements/wordpress
+    container_name: wordpress
+    restart: always
+    depends_on:
+      - mariadb
+    networks:
+      - wp-network
+      - mariadb-network
+    env_file: .env
+    secrets:
+      - db_user_pass
+    volumes:
       - wordpress:/var/www/html
-  # wordpress:
-  #   volumes:
-  #     - wordpress:// #location inside the container where the volume appears
-  #   networks:
-  #     - wp-network
-  #     - mariadb-network
+
   mariadb:
     build: ./requirements/mariadb
     container_name: mariadb
+    restart: always
     networks:
       - mariadb-network
     env_file: .env
@@ -22,29 +38,19 @@ services:
       - db_user_pass
       - db_root_pass
     volumes:
-      - mariadb:/var/lib/mysql 
+      - mariadb:/var/lib/mysql
 
-
-# docker volumes: stores data that allow the container to remain intact even after the container is stopped or removed
-
-# docker named bind mount:
-# driver: which volume driver to use , local means store on the local machine (host)
-# driver_opts: options passed to the volume driver
-# type: tells linux mount system what filesystem type is being used, none means there is no seprate filesystem to mount
-#o: mount options, bind
-# device: specifies the host file system location to store the data
-
-volumes: #defining a docker volume called wordpress or mariadb
+volumes:
   mariadb:
     driver: local
-    driver_opts: 
+    driver_opts:
       type: none
       o: bind
       device: /home/yalkhidi/data/mariadb
 
   wordpress:
     driver: local
-    driver_opts: 
+    driver_opts:
       type: none
       o: bind
       device: /home/yalkhidi/data/wordpress
@@ -52,14 +58,12 @@ volumes: #defining a docker volume called wordpress or mariadb
 networks:
   wp-network:
     driver: bridge
-    internal: true
   mariadb-network:
     driver: bridge
     internal: true
 
 secrets:
   db_user_pass:
-     file: ../secrets/db_user_password.txt
+    file: ../secrets/db_user_password.txt
   db_root_pass:
     file: ../secrets/db_root_password.txt
-
