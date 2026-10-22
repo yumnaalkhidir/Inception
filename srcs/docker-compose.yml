@@ -2,6 +2,7 @@ services:
   nginx:
     build: ./requirements/nginx
     container_name: nginx
+    image: nginx
     restart: always
     ports:
       - "443:443"
@@ -15,6 +16,7 @@ services:
   wordpress:
     build: ./requirements/wordpress
     container_name: wordpress
+    image: wordpress
     restart: always
     depends_on:
       - mariadb
@@ -32,6 +34,7 @@ services:
   mariadb:
     build: ./requirements/mariadb
     container_name: mariadb
+    image: mariadb
     restart: always
     networks:
       - mariadb-network
