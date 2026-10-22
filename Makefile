@@ -1,25 +1,28 @@
-CXX			:= c++
-CXXFLAGS	:= -Wall -Werror -Wextra -std=c++98
-NAME		:= 
-FILES		:= 
-OBJ			:= $(FILES:.cpp=.o)
-HEADER		:=  
+all: build up 
 
+up:
+	cd srcs && docker-compose up -d
 
-all: $(NAME)
+down:
+	cd srcs && docker-compose down
 
-%.o: %.cpp $(HEADER)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+build:
+	mkdir -p /home/${USER}/data/mariadb
+	mkdir -p /home/${USER}/data/wordpress
+	cd srcs && docker-compose build
 
-$(NAME): $(OBJ)
-	$(CXX) $(CXXFLAGS) $(OBJ) -o $(NAME)
+clean: down
+	- docker rmi -f $(docker images -q)
 
-clean:
-	rm -f $(OBJ)
+re: clean all
 
-fclean: clean
-	rm -f $(NAME)
- 
-re: fclean all
+fclean:
+	-docker stop $$(docker ps -qa)
+	-docker rm -f nginx wordpress mariadb
+	-docker volume rm mariadb wordpress
+	-docker rmi -f $$(docker images -qa)
+	-docker network rm $$(docker network ls -q) 2>/dev/null
+	-sudo rm -rf /home/$${USER}/data
+	-yes | docker system prune -a --volumes
 
-.PHONY: all re clean fclean
+.PHONY: up down build clean re  
