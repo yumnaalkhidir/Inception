@@ -1,19 +1,27 @@
 #!/bin/sh
 set -eu
+: "${WP_TITLE:?Missing WP_TITLE}"
+: "${WP_ADMIN_USER:?Missing WP_ADMIN_USER}"
+: "${WP_ADMIN_EMAIL:?Missing WP_ADMIN_EMAIL}"
+: "${WP_ADMIN_PASSWORD_FILE:?Missing WP_ADMIN_PASSWORD_FILE}"
+: "${WP_USER:?Missing WP_USER}"
+: "${WP_USER_EMAIL:?Missing WP_USER_EMAIL}"
+: "${WP_USER_PASSWORD_FILE:?Missing WP_USER_PASSWORD_FILE}"
+
 
 : "${DOMAIN_NAME:?Missing DOMAIN_NAME}"
 : "${MYSQL_DATABASE:?Missing MYSQL_DATABASE}"
 : "${MYSQL_USER:?Missing MYSQL_USER}"
 : "${MYSQL_PASSWORD_FILE:?Missing MYSQL_PASSWORD_FILE}"
 
-MYSQL_HOST="${MYSQL_HOST:-mariadb}"
+WP_DB_HOST="${WP_DB_HOST:-mariadb}"
 DB_PASSWORD=$(cat "$MYSQL_PASSWORD_FILE")
 
 # Wait for MariaDB to accept connections (maximum 60 seconds).
 i=0
 until MYSQL_PASSWORD="$DB_PASSWORD" php -r '
     $db = @new mysqli(
-        getenv("MYSQL_HOST"),
+        getenv("WP_DB_HOST"),
         getenv("MYSQL_USER"),
         getenv("MYSQL_PASSWORD"),
         getenv("MYSQL_DATABASE")
@@ -40,7 +48,7 @@ if [ ! -f /var/www/html/wp-config.php ]; then
 define('DB_NAME', '${MYSQL_DATABASE}');
 define('DB_USER', '${MYSQL_USER}');
 define('DB_PASSWORD', '${DB_PASSWORD}');
-define('DB_HOST', '${MYSQL_HOST}:3306');
+define('DB_HOST', '${WP_DB_HOST}:3306');
 define('DB_CHARSET', 'utf8mb4');
 define('DB_COLLATE', '');
 
@@ -63,5 +71,27 @@ EOF
     chown www-data:www-data /var/www/html/wp-config.php
     chmod 640 /var/www/html/wp-config.php
 fi
+
+WP_ADMIN_PASSWORD=$(cat "$WP_ADMIN_PASSWORD_FILE")
+WP_USER_PASSWORD=$(cat "$WP_USER_PASSWORD_FILE")
+
+if ! wp core is-installed --path=/var/www/html --allow-root >/dev/null 2>&1; then
+    wp core install --path=/var/www/html --allow-root \
+        --url="https://${DOMAIN_NAME}" \
+        --title="$WP_TITLE" \
+        --admin_user="$WP_ADMIN_USER" \
+        --admin_password="$WP_ADMIN_PASSWORD" \
+        --admin_email="$WP_ADMIN_EMAIL" \
+        --skip-email
+fi
+
+if ! wp user get "$WP_USER" --path=/var/www/html --allow-root >/dev/null 2>&1; then
+    wp user create "$WP_USER" "$WP_USER_EMAIL" \
+        --role=author \
+        --user_pass="$WP_USER_PASSWORD" \
+        --path=/var/www/html --allow-root
+fi
+
+chown -R www-data:www-data /var/www/html
 
 exec php-fpm8.2 -F
