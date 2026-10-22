@@ -7,6 +7,10 @@ RUN apt-get update && \
         php-gd php-mbstring php-xml php-zip && \
     rm -rf /var/lib/apt/lists/*
 
+RUN curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+        -o /usr/local/bin/wp && \
+    chmod +x /usr/local/bin/wp
+
 RUN mkdir -p /var/www/html && \
     curl -fsSL https://wordpress.org/wordpress-7.1.3.tar.gz \
         -o /tmp/wordpress.tar.gz && \
