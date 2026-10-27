@@ -19,7 +19,7 @@ re: clean all
 fclean:
 	-docker stop $$(docker ps -qa)
 	-docker rm -f nginx wordpress mariadb
-	-docker volume rm mariadb wordpress
+	-docker volume rm srcs_mariadb srcs_wordpress
 	-docker rmi -f $$(docker images -qa)
 	-docker network rm $$(docker network ls -q) 2>/dev/null
 	-sudo rm -rf /home/$${USER}/data
