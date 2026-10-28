@@ -25,6 +25,10 @@ done
     --dbname="$MYSQL_DATABASE" --dbuser="$MYSQL_USER" \
     --dbpass="$MYSQL_PASSWORD" --dbhost="$WP_DB_HOST" --skip-check
 
+# wp-config.php lives on a volume and survives a port change, so the line above
+# runs once only. Rewrite DB_HOST on every start to follow MYSQL_PORT.
+$WP config set DB_HOST "$WP_DB_HOST"
+
 $WP core is-installed 2>/dev/null || $WP core install \
     --url="https://${DOMAIN_NAME}" --title="$WP_TITLE" \
     --admin_user="$WP_ADMIN_USER" --admin_password="$(cat "$WP_ADMIN_PASSWORD_FILE")" \
