@@ -19,4 +19,5 @@ SQL
      touch "$DATADIR/.inception_initialized"
 fi
 
-exec mariadbd --user=mysql --console
+# --port wins over any value in the .cnf files, so the port stays in .env only.
+exec mariadbd --user=mysql --console --port="${MYSQL_PORT:-3306}"

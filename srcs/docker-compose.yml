@@ -5,11 +5,17 @@ services:
     image: nginx
     restart: always
     ports:
-      - "443:443"
+      # Host side locked to 443: nginx is the only entry point.
+      # Container side follows NGINX_PORT from .env.
+      - "443:${NGINX_PORT}"
     depends_on:
       - wordpress
     networks:
       - wp-network
+    # Only the ports. nginx has no business reading the database variables.
+    environment:
+      NGINX_PORT: ${NGINX_PORT}
+      WP_FPM_PORT: ${WP_FPM_PORT}
     volumes:
       - wordpress:/var/www/html:ro
 

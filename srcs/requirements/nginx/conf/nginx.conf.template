@@ -5,7 +5,7 @@ events {
 http {
     include mime.types;
     server {
-        listen 443 ssl;
+        listen {{NGINX_PORT}} ssl;
         server_name yalkhidi.42.fr;
 
         ssl_certificate /etc/nginx/ssl/certificate.crt;
@@ -24,7 +24,7 @@ http {
             include fastcgi_params;
             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
             fastcgi_param HTTPS on;
-            fastcgi_pass wordpress:9000;
+            fastcgi_pass wordpress:{{WP_FPM_PORT}};
         }
     }
 }

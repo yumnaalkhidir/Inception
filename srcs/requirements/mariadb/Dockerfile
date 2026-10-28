@@ -11,6 +11,4 @@ RUN chmod +x /usr/local/bin/init-db.sh && \
     mkdir -p /run/mysqld && \
     chown -R mysql:mysql /run/mysqld /var/lib/mysql
 
-EXPOSE 3306
-
 ENTRYPOINT ["/usr/local/bin/init-db.sh"]
