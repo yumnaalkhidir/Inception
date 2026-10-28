@@ -24,6 +24,4 @@ COPY conf/www.conf /etc/php/8.2/fpm/pool.d/www.conf
 
 RUN chmod +x /usr/local/bin/wordpress-entrypoint.sh
 
-EXPOSE 9000
-
 ENTRYPOINT ["/usr/local/bin/wordpress-entrypoint.sh"]
