@@ -2,27 +2,26 @@ services:
   nginx:
     build: ./requirements/nginx
     container_name: nginx
-    image: nginx
+    image: nginx:1.0
     restart: always
     ports:
       - "443:443"
     depends_on:
       - wordpress
     networks:
-      - wp-network
+      - inception
     volumes:
       - wordpress:/var/www/html:ro
 
   wordpress:
     build: ./requirements/wordpress
     container_name: wordpress
-    image: wordpress
+    image: wordpress:1.0
     restart: always
     depends_on:
       - mariadb
     networks:
-      - wp-network
-      - mariadb-network
+      - inception
     env_file: .env
     secrets:
       - db_user_pass
@@ -34,10 +33,10 @@ services:
   mariadb:
     build: ./requirements/mariadb
     container_name: mariadb
-    image: mariadb
+    image: mariadb:1.0
     restart: always
     networks:
-      - mariadb-network
+      - inception
     env_file: .env
     secrets:
       - db_user_pass
@@ -47,6 +46,7 @@ services:
 
 volumes:
   mariadb:
+    name: mariadb
     driver: local
     driver_opts:
       type: none
@@ -54,6 +54,7 @@ volumes:
       device: /home/yalkhidi/data/mariadb
 
   wordpress:
+    name: wordpress
     driver: local
     driver_opts:
       type: none
@@ -61,11 +62,9 @@ volumes:
       device: /home/yalkhidi/data/wordpress
 
 networks:
-  wp-network:
+  inception:
+    name: inception
     driver: bridge
-  mariadb-network:
-    driver: bridge
-    internal: true
 
 secrets:
   db_user_pass:
