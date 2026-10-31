@@ -1,28 +1,30 @@
+COMPOSE      := cd srcs && docker-compose
+DATA_DIR     := /home/$(USER)/data
+SUB_DATA_DIRS    := $(DATA_DIR)/mariadb $(DATA_DIR)/wordpress
+
 all: build up 
 
+$(SUB_DATA_DIRS):
+	mkdir -p $@
+
+
+build: $(SUB_DATA_DIRS)
+	$(COMPOSE) build
+
 up:
-	cd srcs && docker-compose up -d
+	$(COMPOSE) up -d
 
 down:
-	cd srcs && docker-compose down
+	$(COMPOSE) down
 
-build:
-	mkdir -p /home/${USER}/data/mariadb
-	mkdir -p /home/${USER}/data/wordpress
-	cd srcs && docker-compose build
-
-clean: down
-	- docker rmi -f $(docker images -q)
-
-re: clean all
+clean: 
+	$(COMPOSE) down --rmi all
 
 fclean:
-	-docker stop $$(docker ps -qa)
-	-docker rm -f nginx wordpress mariadb
-	-docker volume rm srcs_mariadb srcs_wordpress
-	-docker rmi -f $$(docker images -qa)
-	-docker network rm $$(docker network ls -q) 2>/dev/null
-	-sudo rm -rf /home/$${USER}/data
-	-yes | docker system prune -a --volumes
+	$(COMPOSE) down -v --rmi all
+	sudo rm -rf $(DATA_DIR)
+
+
+re: fclean all
 
 .PHONY: up down build clean re  
