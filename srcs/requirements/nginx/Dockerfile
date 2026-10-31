@@ -1,7 +1,7 @@
 FROM debian:bookworm
 
-RUN apt update && \
-    apt install -y nginx openssl && \
+RUN apt-get update && \
+    apt-get install -y nginx openssl --no-install-recommends && \
     rm -rf /var/lib/apt/lists/*
 
 COPY conf/nginx.conf /etc/nginx/nginx.conf
