@@ -5,8 +5,9 @@ DATADIR=/var/lib/mysql
 
 if [ ! -f "$DATADIR/.inception_initialized" ]; then
     chown -R mysql:mysql "$DATADIR"
-    [ -d "$DATADIR/mysql" ] || mariadb-install-db --user=mysql --datadir="$DATADIR" >/dev/null
-
+    if [ ! -d "$DATADIR/mysql" ]; then
+        mariadb-install-db --user=mysql --datadir="$DATADIR" >/dev/null
+    fi
      mariadbd --user=mysql --bootstrap <<SQL
 FLUSH PRIVILEGES;
 ALTER USER 'root'@'localhost' IDENTIFIED BY '$(cat "$MYSQL_ROOT_PASSWORD_FILE")';
