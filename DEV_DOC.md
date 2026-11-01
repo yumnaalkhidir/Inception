@@ -250,7 +250,6 @@ SELECT user_login FROM wp_users;
 Check the TLS connection:
 
 ```bash
-docker exec -it nginx sh
 openssl s_client -connect yalkhidi.42.fr:443 -tls1_2
 ```
 

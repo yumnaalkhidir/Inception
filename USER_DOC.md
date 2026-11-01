@@ -127,14 +127,6 @@ To follow logs continuously, add `-f`:
 docker logs -f nginx
 ```
 
-### Check the website response
-
-```bash
-curl -k -I https://yalkhidi.42.fr
-```
-
-A response such as `HTTP/1.1 200 OK` or a redirect indicates that the web server is responding.
-
 ### Check HTTPS and TLS
 
 ```bash
@@ -159,17 +151,3 @@ You should see:
 - `wordpress/` – WordPress website files.
 
 These directories contain data that persists when containers are removed and recreated.
-
-## 6. Troubleshooting
-
-| Problem | What to check |
-|---|---|
-| Browser cannot find the domain | Check the domain entry in `/etc/hosts`. |
-| Connection refused on port 443 | Check `docker ps` and NGINX logs. |
-| Browser displays a certificate warning | Expected because the project uses a self-signed certificate. |
-| Error establishing a database connection | Check whether MariaDB is running and verify the database credentials. |
-| Website is not loading correctly | Check NGINX and WordPress logs. |
-| Website content disappears after restarting | Check that the named volumes and host data directories still exist. |
-| Container keeps restarting | Check its logs using `docker logs <container>`. |
-
-For more detailed configuration and debugging instructions, see [DEV_DOC.md](DEV_DOC.md).

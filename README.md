@@ -187,4 +187,4 @@ AI tools (Claude and ChatGPT) were used as an assistant, not as a replacement fo
 - **Explanations:** clarifying concepts (PID 1, php-fpm/FastCGI, named volumes with `driver_opts`, Docker secrets).
 - **Debugging:** suggesting hypotheses for errors, which were verified manually.
 
-AI was *not* used to produce the Dockerfiles, entrypoint scripts, or configuration files without being fully understood and rewritten/validated by the authors.
+AI was *not* used to produce the Dockerfiles, entrypoint scripts, or configuration files without being fully understood and rewritten/validated by the author.
