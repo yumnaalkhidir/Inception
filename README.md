@@ -166,23 +166,22 @@ For more detail, see:
 
 ## Resources
 
-### References
+- [Docker Compose](https://docs.docker.com/compose/)
+- [Docker Compose Secrets](https://docs.docker.com/compose/how-tos/use-secrets/)
+- [Docker Compose Volumes](https://docs.docker.com/reference/compose-file/volumes/)
+- [Nginx SSL Module](https://nginx.org/en/docs/http/ngx_http_ssl_module.html)
+- [Nginx FastCGI Module](https://nginx.org/en/docs/http/ngx_http_fastcgi_module.html)
+- [PHP-FPM Configuration](https://www.php.net/manual/en/install.fpm.configuration.php)
+- [WP-CLI – Core Install](https://developer.wordpress.org/cli/commands/core/install/)
+- [MariaDB Documentation - MariaDB Server PDF](https://mariadb.com/docs)
 
-- [Docker documentation](https://docs.docker.com/)
-- [Docker Compose file reference](https://docs.docker.com/compose/compose-file/)
-- [Dockerfile best practices](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
-- [Docker secrets in Compose](https://docs.docker.com/compose/how-tos/use-secrets/)
-- [Docker volumes](https://docs.docker.com/engine/storage/volumes/)
-- [NGINX documentation](https://nginx.org/en/docs/), [`ngx_http_ssl_module`](https://nginx.org/en/docs/http/ngx_http_ssl_module.html), [`ngx_http_fastcgi_module`](https://nginx.org/en/docs/http/ngx_http_fastcgi_module.html)
-- [PHP-FPM configuration](https://www.php.net/manual/en/install.fpm.configuration.php)
-- [WordPress documentation](https://wordpress.org/documentation/) and [WP-CLI](https://wp-cli.org/)
-- [MariaDB Knowledge Base](https://mariadb.com/kb/en/)
-- [Alpine Linux releases](https://alpinelinux.org/releases/)
-- Articles on PID 1 and signal handling in containers, and why `tail -f` / infinite loops are anti-patterns.
+
+- [MariaDB Initialization & Environment Variables](https://mariadb.com/docs/server/server-management/automated-mariadb-deployment-and-administration/docker-and-mariadb/)
+
 
 ### Use of AI
 
-AI tools were used as an assistant, not as a replacement for understanding. Every generated piece was reviewed, tested, and discussed with peers before being kept.
+AI tools (Claude and ChatGPT) were used as an assistant, not as a replacement for understanding. Every generated piece was reviewed, tested, and discussed with peers before being kept.
 
 - **Documentation:** drafting the structure of `README.md`, `USER_DOC.md`, and `DEV_DOC.md`, which were then edited and checked against the real project.
 - **Explanations:** clarifying concepts (PID 1, php-fpm/FastCGI, named volumes with `driver_opts`, Docker secrets).
